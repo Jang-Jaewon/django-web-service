@@ -32,9 +32,13 @@ DJANGO_APPS = [
 PROJECT_APPS = [
     'core',
     'instagram',
+    'accounts',
 ]
 
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    'django_extensions',
+    'debug_toolbar',
+]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
@@ -46,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -120,3 +125,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+AUTH_USER_MODEL = 'auth.User'

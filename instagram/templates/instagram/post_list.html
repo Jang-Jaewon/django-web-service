@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="get">
+        <input type="text" name="keyword" value={{keyword}}>
+        <input type="submit"/>
+    </form>
+    <ul>
+    {% for post in post_list %}
+        {% if post.photo %}
+        <li><img src="{{post.photo.url}}" style="width:100px"/></li>
+        {% endif %}
+        <li>{{post.message}}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
