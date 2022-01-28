@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db   import models
+from django.urls import reverse
 
 from core.models import TimeStampModel
 
@@ -15,12 +16,15 @@ class Post(TimeStampModel):
         # return f'Custom Post Object ({self.id})'
         return self.message
 
-    class Meta:
-        ordering = ['-id']
-
     def message_length(self):
         return len(self.message)
     message_length.short_description = "메시지 글자수"
+
+    def get_absolute_url(self):
+        return reverse('instagram:post_detail', args=[self.pk])
+
+    class Meta:
+        ordering = ['-id']
 
 
 class Comment(TimeStampModel):
