@@ -365,5 +365,7 @@ my_settings.py
 ## .vscode
 .vscode/
 
-## media
-media/
+## media & static
+/static
+/media
+/staticfiles
