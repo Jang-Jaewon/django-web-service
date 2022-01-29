@@ -1,4 +1,4 @@
-{% load static %}
+{% load bootstrap4 static %}
 <!doctype html>
 <html lang="ko">
 <head>
@@ -7,6 +7,7 @@
     <title>{% block title %}{% endblock title %}</title>
     <link rel="stylesheet" href="{% static 'bootstrap-4.4.1-dist/css/bootstrap.css' %}" />
     <script src="{% static 'jquery-3.6.0.min' %}"></script>
+    <script src="{% static 'jquery.csrf.js' %}"></script>
     <script src="{% static 'bootstrap-4.4.1-dist/js/bootstrap.js' %}"></script>
     <style>
         body {
@@ -53,6 +54,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
+            {% bootstrap_messages %}
             {% block content %}
             {% endblock content %}
 

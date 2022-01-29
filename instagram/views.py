@@ -1,29 +1,66 @@
-from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib                 import messages
+from django.shortcuts               import get_object_or_404, render, redirect
 from django.views.generic           import ListView, DetailView, ArchiveIndexView, YearArchiveView, CreateView, UpdateView, DeleteView
+from django.views.decorators.csrf   import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators        import method_decorator
 from django.contrib.auth.mixins     import LoginRequiredMixin
 
-from .models          import Post
+from .models import Post
+from .forms  import PostForm
 
 
-# @login_required
-# def post_list(request):
-#     qs      = Post.objects.all()
-#     keyword = request.GET.get('keyword', '')
-#     if keyword:
-#         qs = qs.filter(message__icontains=keyword)
-#     return render(request, 'instagram/post_list.html', {'post_list':qs, 'keyword':keyword})
+@login_required
+def post_new(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            messages.success(request, '포스팅을 저장했습니다.')
+            return redirect(post)
+    else:
+        form = PostForm()
 
-# @method_decorator(login_required, name='dispatch')
+    return render(request, 'instagram/post_form.html', {'form': form, 'post': None,})
+
+
+@login_required
+def post_edit(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    if post.author != request.user:
+        messages.error(request, '작성자만 수정할 수 있습니다.')
+        return redirect(post)
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            post = form.save()
+            messages.success(request, '포스팅을 수정했습니다.')
+            return redirect(post)
+    else:
+        form = PostForm(instance=post)
+
+    return render(request, 'instagram/post_form.html', {'form': form, 'post': post,})
+
+
+@login_required
+def post_delete(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == 'POST':
+        post.delete()
+        messages.success(request, '포스팅을 삭제했습니다.')
+        return redirect('instagram:post_list')
+    return render(request, 'instagram/post_confirm_delete.html', {'post': post,})
+
+
 class PostListView(LoginRequiredMixin, ListView):
     model = Post
     paginate_by = 10
 post_list = PostListView.as_view()
 
-# def post_detail(request, pk):
-#     post = get_object_or_404(Post, pk=pk)
-#     return render(request, 'instagram/post_detail.html', {'post':post})
 
 class PostDetailView(DetailView):
     model = Post

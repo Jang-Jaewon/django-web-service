@@ -137,3 +137,11 @@ INTERNAL_IPS = [
 ]
 
 AUTH_USER_MODEL = 'auth.User'
+
+# Django Message Mapping
+from django.contrib.messages import constants as messages_contants
+
+MESSAGE_TAGS = {
+    messages_contants.DEBUG: 'secondary',
+    messages_contants.ERROR: 'danger',
+}
